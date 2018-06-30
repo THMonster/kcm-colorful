@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QtGlobal>
 #include <QDir>
+#include <QThread>
 
 KcmColorfulHelper::KcmColorfulHelper(int argc, char *argv[], QObject *parent) : QObject(parent)
 {
@@ -248,7 +249,9 @@ void KcmColorfulHelper::save()
     QDBusConnection::sessionBus().send(messageA);
     QDBusMessage message = QDBusMessage::createSignal(QStringLiteral("/KWin"), QStringLiteral("org.kde.KWin"), QStringLiteral("reloadConfig"));
     QDBusConnection::sessionBus().send(message);
-    //    emit changed(false);
+
+    QThread::sleep(1);
+    QDBusConnection::sessionBus().send(messageA);
 }
 
 void KcmColorfulHelper::genCSName()
