@@ -34,6 +34,7 @@ private:
     void saveCSFile();
     QColor addJitter(QColor color); // due to a stupid kde's bug;
     bool isDarkTheme();
+    void calcColor(int r, int g, int b);
 
 signals:
 

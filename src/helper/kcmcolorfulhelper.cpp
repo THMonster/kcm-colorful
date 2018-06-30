@@ -1,4 +1,7 @@
 #include "kcmcolorfulhelper.h"
+#include "colordata.h"
+#include <climits>
+#include <cmath>
 #include <QSettings>
 #include <QUuid>
 #include <QDebug>
@@ -33,7 +36,7 @@ void KcmColorfulHelper::run()
     colorExtractProc = new QProcess(this);
 
     arg.append("-c");
-    arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\ndominant_color = color_thief.get_color(quality=5)\\nprint(\"IsoaSFlus,{},{},{}\".format(dominant_color[0], dominant_color[1], dominant_color[2]))\\nsys.stdout.flush()\\n\"\"\")");
+    arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\ndominant_color = color_thief.get_color(quality=10)\\nprint(\"IsoaSFlus,{},{},{}\".format(dominant_color[0], dominant_color[1], dominant_color[2]))\\nsys.stdout.flush()\\n\"\"\")");
     arg.append(wallpaperFilePath);
 
     connect(colorExtractProc, &QProcess::readyReadStandardOutput, this, &KcmColorfulHelper::dealStdOut);
@@ -312,7 +315,7 @@ void KcmColorfulHelper::saveCSFile()
 
 QColor KcmColorfulHelper::addJitter(QColor color)
 {
-    return QColor(color.red() + (qrand()%3 - 1), color.green() + (qrand()%3 - 1), color.blue() + (qrand()%3 - 1));
+    return QColor(color.red() + (qrand()%5 - 2), color.green() + (qrand()%5 - 2), color.blue() + (qrand()%5 - 2));
 }
 
 bool KcmColorfulHelper::isDarkTheme()
@@ -324,6 +327,21 @@ bool KcmColorfulHelper::isDarkTheme()
     }
 }
 
+void KcmColorfulHelper::calcColor(int r, int g, int b)
+{
+    int d_min = INT_MAX;
+    int tmp = 0;
+    int index = 0;
+    for (int i = 0; i < 256; i++) {
+        tmp = pow(colordata[i][0] - r, 2) + pow(colordata[i][1] - g, 2) + pow(colordata[i][2] - b, 2);
+        if (tmp < d_min) {
+            index = i;
+            d_min = tmp;
+        }
+    }
+    c = new QColor(colordata[index][0], colordata[index][1], colordata[index][2]);
+}
+
 void KcmColorfulHelper::dealStdOut()
 {
     while(!colorExtractProc->atEnd())
@@ -331,9 +349,11 @@ void KcmColorfulHelper::dealStdOut()
         QString rgb(colorExtractProc->readLine());
         if (rgb.contains("IsoaSFlus")) {
             QStringList rgbList = rgb.split(",");
-            c = new QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt());
+            calcColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt());
+//            c = new QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt());
             qDebug() << c->red() << c->green() << c->blue();
 //            saveCSFile();
+
             readTemplateCS();
             changeColorScheme(tConfig);
             save();
