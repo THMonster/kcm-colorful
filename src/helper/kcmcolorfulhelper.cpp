@@ -151,9 +151,9 @@ void KcmColorfulHelper::changeColorScheme(KSharedConfigPtr config)
     for (int i = 0; i < colorSchemes.length(); ++i)
     {
         KConfigGroup group(mConfig, colorSetGroupList.value(i));
-        group.writeEntry("BackgroundNormal", colorSchemes[i].background(KColorScheme::NormalBackground).color());
+        group.writeEntry("BackgroundNormal", addJitter(colorSchemes[i].background(KColorScheme::NormalBackground).color()));
         group.writeEntry("BackgroundAlternate", colorSchemes[i].background(KColorScheme::AlternateBackground).color());
-        group.writeEntry("ForegroundNormal",addJitter(colorSchemes[i].foreground(KColorScheme::NormalText).color()));
+        group.writeEntry("ForegroundNormal", addJitter(colorSchemes[i].foreground(KColorScheme::NormalText).color()));
         group.writeEntry("ForegroundInactive", colorSchemes[i].foreground(KColorScheme::InactiveText).color());
         group.writeEntry("ForegroundActive", colorSchemes[i].foreground(KColorScheme::ActiveText).color());
         group.writeEntry("ForegroundLink", colorSchemes[i].foreground(KColorScheme::LinkText).color());
