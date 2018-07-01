@@ -1,0 +1,3 @@
+[submodule "plasmathemes/kde-theme-backup"]
+	path = plasmathemes/kde-theme-backup
+	url = https://github.com/IsoaSFlus/kde-theme-backup

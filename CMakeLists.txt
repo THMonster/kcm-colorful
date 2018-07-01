@@ -27,3 +27,4 @@ add_subdirectory(src)
 
 file(GLOB schemefiles schemes/*.colors)
 install( FILES ${schemefiles} DESTINATION ${KDE_INSTALL_DATADIR}/color-schemes )
+install(DIRECTORY plasmathemes/kde-theme-backup/Colorful DESTINATION ${KDE_INSTALL_DATADIR}/plasma/desktoptheme)
