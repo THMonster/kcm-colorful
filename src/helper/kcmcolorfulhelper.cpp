@@ -11,6 +11,7 @@
 
 KcmColorfulHelper::KcmColorfulHelper(int argc, char *argv[], QObject *parent) : QObject(parent)
 {
+    Q_UNUSED(argc);
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
     mConfig = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
@@ -323,7 +324,7 @@ QColor KcmColorfulHelper::addJitter(QColor color)
 
 bool KcmColorfulHelper::isDarkTheme()
 {
-    if (c->red() < 80 && c->green() < 80 && c->blue() < 80) {
+    if (c->red() < 66 && c->green() < 66 && c->blue() < 80) {
         return true;
     } else {
         return false;
