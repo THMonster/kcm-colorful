@@ -11,7 +11,8 @@
 
 # Build
 ```
-cd /path/to/source
+git clone --recursive https://github.com/IsoaSFlus/kcm-colorful.git
+cd kcm-colorful
 mkdir build
 cd ./build
 cmake ../
@@ -25,4 +26,5 @@ sudo make install
 kcmcolorfulhelper <picture-file>
 ```
 接下来的目标主要是在主题色选择上，让得到主题色比较符合人类的审美。
+
 基本功能成熟之后会做成KCM集成到kde的系统设置中（希望我不要中途弃坑233333
