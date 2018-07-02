@@ -18,6 +18,7 @@ public:
     void run();
 
 private:
+    QList<QColor> palette;
     QColor *c = nullptr;
     QString colorSchemeName;
     QString prevColorSchemeName;
@@ -34,7 +35,7 @@ private:
     void saveCSFile();
     QColor addJitter(QColor color); // due to a stupid kde's bug;
     bool isDarkTheme();
-    void calcColor(int r, int g, int b);
+    void calcColor();
 
 signals:
 
