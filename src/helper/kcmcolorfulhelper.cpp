@@ -364,8 +364,8 @@ void KcmColorfulHelper::calcColor()
             d_min = tmp;
         }
     }
-    c = new QColor(colordata[index][0], colordata[index][1], colordata[index][2]);
-//    c = new QColor(color);
+//    c = new QColor(colordata[index][0], colordata[index][1], colordata[index][2]);
+    c = new QColor(color);
 }
 
 void KcmColorfulHelper::dealStdOut()
