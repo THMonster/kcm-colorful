@@ -9,6 +9,8 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 
+#include "mmcq.h"
+
 class KcmColorfulHelper : public QObject
 {
     Q_OBJECT
@@ -19,13 +21,14 @@ public:
 
 private:
     QList<QColor> palette;
+    MMCQ *mmcq;
     QColor *c = nullptr;
     QString colorSchemeName;
     QString prevColorSchemeName;
     KSharedConfigPtr mConfig;
     KSharedConfigPtr tConfig;
     QString wallpaperFilePath;
-    QProcess *colorExtractProc = nullptr;
+//    QProcess *colorExtractProc = nullptr;
     void getPrevCSName();
     void readTemplateCS();
     void changeColorScheme();
@@ -40,7 +43,7 @@ private:
 signals:
 
 public slots:
-    void dealStdOut();
+//    void dealStdOut();
 };
 
 #endif // KCMCOLORFULHELPER_H

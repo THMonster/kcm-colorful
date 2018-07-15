@@ -1,5 +1,6 @@
 #include "kcmcolorfulhelper.h"
 #include "colordata.h"
+#include "mmcq.h"
 #include <climits>
 #include <cmath>
 #include <QSettings>
@@ -16,6 +17,7 @@ KcmColorfulHelper::KcmColorfulHelper(int argc, char *argv[], QObject *parent) : 
     qsrand((uint)time.msec());
     mConfig = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
     wallpaperFilePath = QString(argv[1]);
+    mmcq = new MMCQ(wallpaperFilePath);
 //    genCSName();
 //    getPrevCSName();
 //    readDefaultCS();
@@ -24,26 +26,34 @@ KcmColorfulHelper::KcmColorfulHelper(int argc, char *argv[], QObject *parent) : 
 KcmColorfulHelper::~KcmColorfulHelper()
 {
     delete c;
-    colorExtractProc->terminate();
-    colorExtractProc->waitForFinished(3000);
-    colorExtractProc->deleteLater();
+//    colorExtractProc->terminate();
+//    colorExtractProc->waitForFinished(3000);
+//    colorExtractProc->deleteLater();
     mConfig->markAsClean();
     tConfig->markAsClean();
 }
 
 void KcmColorfulHelper::run()
 {
-    QStringList arg;
+//    QStringList arg;
 
-    colorExtractProc = new QProcess(this);
+//    colorExtractProc = new QProcess(this);
 
-    arg.append("-c");
-    arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\npalette = color_thief.get_palette(color_count=6)\\nfor color in palette:\\n    print(\"IsoaSFlus,{},{},{}\".format(color[0], color[1], color[2]))\\n    sys.stdout.flush()\\nprint('EOF')\\n\"\"\")");
-    //arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\ndominant_color = color_thief.get_color(quality=10)\\nprint(\"IsoaSFlus,{},{},{}\".format(dominant_color[0], dominant_color[1], dominant_color[2]))\\nsys.stdout.flush()\\n\"\"\")");
-    arg.append(wallpaperFilePath);
+//    arg.append("-c");
+//    arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\npalette = color_thief.get_palette(color_count=6)\\nfor color in palette:\\n    print(\"IsoaSFlus,{},{},{}\".format(color[0], color[1], color[2]))\\n    sys.stdout.flush()\\nprint('EOF')\\n\"\"\")");
+//    //arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\ndominant_color = color_thief.get_color(quality=10)\\nprint(\"IsoaSFlus,{},{},{}\".format(dominant_color[0], dominant_color[1], dominant_color[2]))\\nsys.stdout.flush()\\n\"\"\")");
+//    arg.append(wallpaperFilePath);
 
-    connect(colorExtractProc, &QProcess::readyReadStandardOutput, this, &KcmColorfulHelper::dealStdOut);
-    colorExtractProc->start("python3", arg);
+//    connect(colorExtractProc, &QProcess::readyReadStandardOutput, this, &KcmColorfulHelper::dealStdOut);
+//    colorExtractProc->start("python3", arg);
+
+    palette = mmcq->get_palette(16);
+    calcColor();
+    qDebug() << c->red() << c->green() << c->blue();
+    readTemplateCS();
+    changeColorScheme(tConfig);
+    save();
+//    QCoreApplication::exit();
 }
 
 void KcmColorfulHelper::getPrevCSName()
@@ -337,56 +347,60 @@ void KcmColorfulHelper::calcColor()
     int p_min = INT_MAX;
     int p_tmp = 0;
     int p_average = 0;
+    int weight_of_order[16] = {160, 150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10};
     QColor color;
 
     QList<QColor>::iterator it;
-    for (it = palette.begin(); it != palette.end(); ++it) {
+    for (it = palette.begin(); it != palette.end() - (palette.size() / 2); ++it) {
+        qDebug() << QString("%1,%2,%3").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()));
         p_tmp = 0;
         p_average = (it->red() + it->green() + it->blue()) / 3;
 //       p_tmp = pow(it->red() - 200, 2) + pow(it->green() - 200, 2) + pow(it->blue() - 200, 2);
         p_tmp = abs((it->red() + it->green() + it->blue()) - (150 * 3));
         p_tmp -= 3 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
+        p_tmp -= weight_of_order[it - palette.begin()];
+        p_tmp += it->green();
        if (p_tmp < p_min) {
            color = *it;
            p_min = p_tmp;
        }
     }
 
-    qDebug() << QString("%1,%2,%3").arg(QString::number(color.red()), QString::number(color.green()), QString::number(color.blue()));
 
-    int d_min = INT_MAX;
-    int tmp = 0;
-    int index = 0;
-    for (int i = 0; i < 256; i++) {
-        tmp = pow(colordata[i][0] - color.red(), 2) + pow(colordata[i][1] - color.green(), 2) + pow(colordata[i][2] - color.blue(), 2);
-        if (tmp < d_min) {
-            index = i;
-            d_min = tmp;
-        }
-    }
+
+//    int d_min = INT_MAX;
+//    int tmp = 0;
+//    int index = 0;
+//    for (int i = 0; i < 256; i++) {
+//        tmp = pow(colordata[i][0] - color.red(), 2) + pow(colordata[i][1] - color.green(), 2) + pow(colordata[i][2] - color.blue(), 2);
+//        if (tmp < d_min) {
+//            index = i;
+//            d_min = tmp;
+//        }
+//    }
 //    c = new QColor(colordata[index][0], colordata[index][1], colordata[index][2]);
     c = new QColor(color);
 }
 
-void KcmColorfulHelper::dealStdOut()
-{
-    while(!colorExtractProc->atEnd())
-    {
-        QString rgb(colorExtractProc->readLine());
-        if (rgb.contains("IsoaSFlus")) {
-            qDebug() << rgb;
-            QStringList rgbList = rgb.split(",");
-            palette.append(QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt()));
-//            c = new QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt());
-        } else if (rgb.contains("EOF")) {
-            calcColor();
-            qDebug() << c->red() << c->green() << c->blue();
-            readTemplateCS();
-            changeColorScheme(tConfig);
-            save();
-            QCoreApplication::exit();
-        }
-    }
-}
+//void KcmColorfulHelper::dealStdOut()
+//{
+//    while(!colorExtractProc->atEnd())
+//    {
+//        QString rgb(colorExtractProc->readLine());
+//        if (rgb.contains("IsoaSFlus")) {
+//            qDebug() << rgb;
+//            QStringList rgbList = rgb.split(",");
+//            palette.append(QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt()));
+////            c = new QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt());
+//        } else if (rgb.contains("EOF")) {
+//            calcColor();
+//            qDebug() << c->red() << c->green() << c->blue();
+//            readTemplateCS();
+//            changeColorScheme(tConfig);
+//            save();
+//            QCoreApplication::exit();
+//        }
+//    }
+//}
 
 
