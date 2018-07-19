@@ -359,7 +359,7 @@ void KcmColorfulHelper::calcColor()
         p_tmp = abs((it->red() + it->green() + it->blue()) - (150 * 3));
         p_tmp -= 3 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
         p_tmp -= weight_of_order[it - palette.begin()];
-        p_tmp += it->green();
+//        p_tmp += it->green();
        if (p_tmp < p_min) {
            color = *it;
            p_min = p_tmp;
