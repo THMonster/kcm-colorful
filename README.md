@@ -19,6 +19,13 @@ sudo make install
 #Then set your plasma desktop theme to "Colorful" for best experience.
 ```
 
+## INSTALLATION
+### Archlinux (AUR)
+```
+yaourt -S kcm-colorful-git # or any other aur helper
+```
+Thanks for [@VOID001](https://github.com/VOID001)'s work.
+
 ## Screenshots
 ![a](https://raw.githubusercontent.com/IsoaSFlus/kcm-colorful/master/screenshots/a.png)
 ![b](https://raw.githubusercontent.com/IsoaSFlus/kcm-colorful/master/screenshots/b.png)
