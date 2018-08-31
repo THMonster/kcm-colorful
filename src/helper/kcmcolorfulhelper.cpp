@@ -14,7 +14,7 @@ KcmColorfulHelper::KcmColorfulHelper(int argc, char *argv[], QObject *parent) : 
 {
     Q_UNUSED(argc);
     QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
+    qsrand(static_cast<uint>(time.msec()));
     mConfig = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
     wallpaperFilePath = QString(argv[1]);
     mmcq = new MMCQ(wallpaperFilePath);
@@ -347,23 +347,24 @@ void KcmColorfulHelper::calcColor()
     int p_min = INT_MAX;
     int p_tmp = 0;
     int p_average = 0;
-    int weight_of_order[16] = {160, 150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10};
+//    int weight_of_order[16] = {160, 150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10};
     QColor color;
 
     QList<QColor>::iterator it;
     for (it = palette.begin(); it != palette.end() - (palette.size() / 2); ++it) {
-        qDebug() << QString("%1,%2,%3").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()));
+
         p_tmp = 0;
         p_average = (it->red() + it->green() + it->blue()) / 3;
-//       p_tmp = pow(it->red() - 200, 2) + pow(it->green() - 200, 2) + pow(it->blue() - 200, 2);
+        //       p_tmp = pow(it->red() - 200, 2) + pow(it->green() - 200, 2) + pow(it->blue() - 200, 2);
         p_tmp = abs((it->red() + it->green() + it->blue()) - (150 * 3));
         p_tmp -= 3 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
-        p_tmp -= weight_of_order[it - palette.begin()];
-//        p_tmp += it->green();
-       if (p_tmp < p_min) {
-           color = *it;
-           p_min = p_tmp;
-       }
+        //        p_tmp -= weight_of_order[it - palette.begin()];
+        p_tmp += it->green();
+        qDebug() << QString("%1,%2,%3:%4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(p_tmp));
+        if (p_tmp < p_min) {
+            color = *it;
+            p_min = p_tmp;
+        }
     }
 
 
