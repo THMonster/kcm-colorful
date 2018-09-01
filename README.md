@@ -39,5 +39,12 @@ Thanks for [@VOID001](https://github.com/VOID001)'s work.
 ## Postscript
 本项目还处于早期阶段，目前只实现了一个cli的程序用于根据输入的图片改变kde的颜色配置，用法如下：
 ```
-kcmcolorfulhelper <picture-file>
+Usage: ./kcmcolorfulhelper [options]
+Helper for kcm-colorful.
+Project address: https://github.com/IsoaSFlus/kcm-colorful
+
+Options:
+  -h, --help               Displays this help.
+  -p, --picture <file>     Picture to extract color.
+  -c, --color <colorcode>  Set color manually, eg: #1234ef.
 ```
