@@ -10,14 +10,20 @@
 #include <QDir>
 #include <QThread>
 
-KcmColorfulHelper::KcmColorfulHelper(int argc, char *argv[], QObject *parent) : QObject(parent)
+KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QObject *parent) : QObject(parent)
 {
-    Q_UNUSED(argc);
     QTime time = QTime::currentTime();
     qsrand(static_cast<uint>(time.msec()));
     mConfig = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
-    wallpaperFilePath = QString(argv[1]);
-    mmcq = new MMCQ(wallpaperFilePath);
+
+    if (pic == QString("IsoaSFlus-NOPIC")) {
+        c = new QColor(colorcode);
+    } else {
+        wallpaperFilePath = pic;
+        mmcq = new MMCQ(wallpaperFilePath);
+    }
+
+
 //    genCSName();
 //    getPrevCSName();
 //    readDefaultCS();
@@ -46,9 +52,10 @@ void KcmColorfulHelper::run()
 
 //    connect(colorExtractProc, &QProcess::readyReadStandardOutput, this, &KcmColorfulHelper::dealStdOut);
 //    colorExtractProc->start("python3", arg);
-
-    palette = mmcq->get_palette(16);
-    calcColor();
+    if (mmcq != nullptr) {
+        palette = mmcq->get_palette(16);
+        calcColor();
+    }
     qDebug() << c->red() << c->green() << c->blue();
     readTemplateCS();
     changeColorScheme(tConfig);

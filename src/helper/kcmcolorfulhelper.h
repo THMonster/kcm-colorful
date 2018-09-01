@@ -15,13 +15,13 @@ class KcmColorfulHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit KcmColorfulHelper(int argc, char *argv[], QObject *parent = nullptr);
+    explicit KcmColorfulHelper(QString pic, QString colorcode, QObject *parent = nullptr);
     ~KcmColorfulHelper();
     void run();
 
 private:
     QList<QColor> palette;
-    MMCQ *mmcq;
+    MMCQ *mmcq = nullptr;
     QColor *c = nullptr;
     QString colorSchemeName;
     QString prevColorSchemeName;
@@ -36,7 +36,7 @@ private:
     void save();
     void genCSName();
     void saveCSFile();
-    QColor addJitter(QColor color); // due to a stupid kde's bug;
+    QColor addJitter(QColor color); // due to a stupid bug of kde;
     bool isDarkTheme();
     void calcColor();
 
