@@ -58,4 +58,4 @@ Options:
 第三，安装[BreezeBlurred](https://github.com/alex47/BreezeBlurred)，这个项目在原版Breeze窗口装饰主题的基础上提供的透明效果。在安装完成后打开KDE的系统设置->应用程序风格->窗口装饰，找到该主题“微风”（注意，你会发现你其中有复数个“微风”因为原版也叫“微风”）并打开其配置菜单，关闭绘制窗口背景渐变并调整透明度（推荐60%，因为这与桌面主题一致），如下图。
 ![](https://i.loli.net/2018/09/04/5b8e0ce1a79a7.png)
 
-最后，如果你对我截图左测的dock感兴趣，请安装[Latte-Dock](https://github.com/psifidotos/)。
+最后，如果你对我截图左测的dock感兴趣，请安装[Latte-Dock](https://github.com/psifidotos/Latte-Dock)。
