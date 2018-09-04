@@ -2,6 +2,7 @@
 #include <QRgb>
 #include <queue>
 #include <algorithm>
+#include <QDebug>
 #include "mmcq.h"
 
 
@@ -9,6 +10,10 @@ MMCQ::MMCQ(QString file)
 {
 
     QImage i(file);
+    if (i.isNull()) {
+        qDebug() << "ERROR: Invalid image file!"; //Invalid image file.
+        exit(1);
+    }
     img = new QImage(i.convertToFormat(QImage::Format_RGBA8888));
     h = img->height();
     w = img->width();
