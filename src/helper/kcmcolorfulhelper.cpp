@@ -56,7 +56,8 @@ void KcmColorfulHelper::run()
         palette = mmcq->get_palette(16);
         calcColor();
     }
-    qDebug() << c->red() << c->green() << c->blue();
+//    qDebug() << c->red() << c->green() << c->blue();
+    qDebug().noquote() << QString("Select: %1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m").arg(QString::number(c->red()), QString::number(c->green()), QString::number(c->blue()));
     readTemplateCS();
     changeColorScheme(tConfig);
     save();
@@ -367,7 +368,7 @@ void KcmColorfulHelper::calcColor()
         p_tmp -= 3 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
         //        p_tmp -= weight_of_order[it - palette.begin()];
         p_tmp += it->green();
-        qDebug() << QString("%1,%2,%3:%4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(p_tmp));
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(p_tmp));
         if (p_tmp < p_min) {
             color = *it;
             p_min = p_tmp;
