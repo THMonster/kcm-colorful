@@ -1,4 +1,6 @@
 # KCM-Colorful
+[English Version](https://github.com/IsoaSFlus/kcm-colorful/blob/master/README.en.md)
+
 根据当前的壁纸改变KDE Plasma的颜色。
 
 ## Requirements
