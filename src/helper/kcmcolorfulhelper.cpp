@@ -352,26 +352,35 @@ bool KcmColorfulHelper::isDarkTheme()
 
 void KcmColorfulHelper::calcColor()
 {
-    int p_min = INT_MAX;
-    int p_tmp = 0;
+    double p_min = 99999.0;
+    double pt = 0;
+    double p_tmp = 0;
     int p_average = 0;
-//    int weight_of_order[16] = {160, 150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10};
+
+    double weight_of_order[8] = {1, 1, 1, 1, 0.9, 0.8, 0.7, 0.6};
     QColor color;
-
     QList<QColor>::iterator it;
-    for (it = palette.begin(); it != palette.end() - (palette.size() / 2); ++it) {
-
-        p_tmp = 0;
+    for (it = palette.begin(); it != palette.end() && (it - palette.begin()) < 8; ++it) {
+        pt = 100;
         p_average = (it->red() + it->green() + it->blue()) / 3;
-        //       p_tmp = pow(it->red() - 200, 2) + pow(it->green() - 200, 2) + pow(it->blue() - 200, 2);
-        p_tmp = abs((it->red() + it->green() + it->blue()) - (150 * 3));
-        p_tmp -= 3 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
-        //        p_tmp -= weight_of_order[it - palette.begin()];
-        p_tmp += it->green();
-        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(p_tmp));
-        if (p_tmp < p_min) {
+        pt += 4 * sqrt(abs((it->red() + it->green() + it->blue()) - (180 * 3)));
+        qDebug().noquote() << pt;
+        p_tmp = 1.5 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
+        if (p_tmp > 40.0) {
+            p_tmp = 40.0;
+        }
+        pt -= p_tmp;
+        qDebug().noquote() << pt;
+        p_tmp = ((((it->green() + it->blue()) / 2) > it->red()) ? (((it->green() + it->blue()) / 2 - it->red()) * 0.8 - abs(it->green() - it->blue())) : 0);
+        pt += (p_tmp > 0 ? p_tmp : 0);
+        qDebug().noquote() << pt;
+//        p_tmp += 0.5 * it->green();
+        pt = ((pt < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()])) * pt;
+//        qDebug().noquote() << ((p_tmp < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()]));
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt));
+        if (pt < p_min) {
             color = *it;
-            p_min = p_tmp;
+            p_min = pt;
         }
     }
 
