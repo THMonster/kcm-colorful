@@ -39,14 +39,18 @@ Thanks for [@VOID001](https://github.com/VOID001)'s work.
 ## Postscript
 This project is very prototype yet. It has a cli helper now. **Usage**:
 ```
-Usage: ./kcmcolorfulhelper [options]
+Usage: kcmcolorfulhelper [options]
 Helper for kcm-colorful.
 Project address: https://github.com/IsoaSFlus/kcm-colorful
 
 Options:
-  -h, --help               Displays this help.
-  -p, --picture <file>     Picture to extract color.
-  -c, --color <colorcode>  Set color manually, eg: #1234ef.
+  -h, --help                  Displays this help.
+  -p, --picture <file>        Picture to extract color.
+  -c, --color <colorcode>     Set color manually, eg: #1234ef.
+  -n, --palette-number <int>  Set the number of colors of palette in the first
+                              color extraction. Valid number is between 1 to 16,
+                              default is 8.
+  -s, --set-as-wallpaper      Set picture specified by "-p" as wallpaper.
 ```
 
 **If you want to make your KDE look like the screenshots above, just follow these steps.**

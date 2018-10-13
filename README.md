@@ -41,14 +41,18 @@ Thanks for [@VOID001](https://github.com/VOID001)'s work.
 ## Postscript
 本项目还处于早期阶段，目前只实现了一个cli的程序用于根据输入的图片改变kde的颜色配置，**用法**如下：
 ```
-Usage: ./kcmcolorfulhelper [options]
+Usage: kcmcolorfulhelper [options]
 Helper for kcm-colorful.
 Project address: https://github.com/IsoaSFlus/kcm-colorful
 
 Options:
-  -h, --help               Displays this help.
-  -p, --picture <file>     Picture to extract color.
-  -c, --color <colorcode>  Set color manually, eg: #1234ef.
+  -h, --help                  Displays this help.
+  -p, --picture <file>        Picture to extract color.
+  -c, --color <colorcode>     Set color manually, eg: #1234ef.
+  -n, --palette-number <int>  Set the number of colors of palette in the first
+                              color extraction. Valid number is between 1 to 16,
+                              default is 8.
+  -s, --set-as-wallpaper      Set picture specified by "-p" as wallpaper.
 ```
 
 **如果你想实现像我截图中一样的效果，那么还需要一些额外的设置。**
