@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     parser.addOption(pictureOption);
     QCommandLineOption colorOption(QStringList() << "c" << "color", "Set color manually, eg: #1234ef.", "colorcode", "#EFEFEF");
     parser.addOption(colorOption);
-    QCommandLineOption paletteOption(QStringList() << "n" << "palette-number", "Set the number of colors of palette. Valid number is between 1 to 16, default is 8.", "int", "8");
+    QCommandLineOption paletteOption(QStringList() << "n" << "palette-number", "Set the number of colors of palette in the first color extraction. Valid number is between 1 to 16, default is 8.", "int", "8");
     parser.addOption(paletteOption);
 
     parser.process(a);

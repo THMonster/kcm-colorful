@@ -41,9 +41,6 @@ KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QString pn,
 KcmColorfulHelper::~KcmColorfulHelper()
 {
     delete c;
-//    colorExtractProc->terminate();
-//    colorExtractProc->waitForFinished(3000);
-//    colorExtractProc->deleteLater();
     mConfig->markAsClean();
     tConfig->markAsClean();
 }
@@ -349,75 +346,87 @@ bool KcmColorfulHelper::isDarkTheme()
 
 void KcmColorfulHelper::calcColor()
 {
-    double p_min_a = 99999.0;
-    double p_min_b = 99999.0;
+    double p_max_a = 0;
+    double p_max_b = 0;
     double pt = 0;
-    double p_tmp = 0;
-    int p_average = 0;
+    double pt_val = 0;
+    double pt_sat = 0;
+//    double hue = 0;
+    double sat = 0;
+    double val = 0;
+    double A = 0;
 
     double weight_of_order[8] = {1, 1, 1, 0.95, 0.9, 0.8, 0.7, 0.6};
     QColor color_a;
     QColor color_b;
     QList<QColor>::iterator it;
     for (it = palette.begin(); it != palette.end() && (it - palette.begin()) < 8; ++it) {
-        pt = 100;
-        p_average = (it->red() + it->green() + it->blue()) / 3;
-        p_tmp = 4 * sqrt(abs((it->red() + it->green() + it->blue()) - (170 * 3)));
-        if (p_tmp < 40.0) {
-            p_tmp = 40.0;
+        pt = 0;
+        pt_val = 0;
+        pt_sat = 0;
+        val = it->value();
+        sat = it->saturation();
+
+        A = 220.0 + (0.137 * (255.0 - sat));
+        if (val < A) {
+            pt_val = 80.0 - ((A - val) / A * 80.0);
+        } else {
+            pt_val = 80.0 + ((val - A) / (255.0 - A) * 20.0);
         }
-        pt += p_tmp;
-        qDebug().noquote() << pt;
-        p_tmp = 1.5 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
-        if (p_tmp > 40.0) {
-            p_tmp = 40.0;
+
+        if (sat < 50) {
+            pt_sat = 100.0 - ((50.0 - sat) / 50.0 * 100.0);
+        } else if (sat > 220) {
+            pt_sat = 100.0 - ((sat - 220.0) / 35.0 * 100.0);
+        } else {
+            pt_sat = 100;
         }
-        pt -= p_tmp;
-        qDebug().noquote() << pt;
-        p_tmp = ((((it->green() + it->blue()) / 2) > it->red()) ? (((it->green() + it->blue()) / 2 - it->red()) * 0.8 - 1.5 * abs(it->green() - it->blue())) : 0);
-        pt += (p_tmp > 0 ? p_tmp : 0);
-        qDebug().noquote() << pt;
-//        p_tmp += 0.5 * it->green();
-        pt = ((pt < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()])) * pt;
-//        qDebug().noquote() << ((p_tmp < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()]));
-        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt));
-        if (pt < p_min_a) {
+
+        pt = (pt_val + pt_sat) / 2;
+        pt = weight_of_order[it - palette.begin()] * pt;
+
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m %5, %6, weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt), QString::number(pt_val), QString::number(pt_sat));
+        if (pt > p_max_a) {
             color_a = *it;
-            p_min_a = pt;
+            p_max_a = pt;
         }
     }
 
     qDebug().noquote() << "=============";
 
     for (it = palette_16.begin(); it != palette_16.end() && (it - palette_16.begin()) < 8; ++it) {
-        pt = 100;
-        p_average = (it->red() + it->green() + it->blue()) / 3;
-        p_tmp = 4 * sqrt(abs((it->red() + it->green() + it->blue()) - (170 * 3)));
-        if (p_tmp < 40.0) {
-            p_tmp = 40.0;
+        pt = 0;
+        pt_val = 0;
+        pt_sat = 0;
+        val = it->value();
+        sat = it->saturation();
+
+        A = 220 + (0.137 * (255 - sat));
+        if (val < A) {
+            pt_val = 80 - ((A - val) / A * 80);
+        } else {
+            pt_val = 80 + ((val - A) / (255 - A) * 20);
         }
-        pt += p_tmp;
-        qDebug().noquote() << pt;
-        p_tmp = 1.5 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
-        if (p_tmp > 40.0) {
-            p_tmp = 40.0;
+
+        if (sat < 50) {
+            pt_sat = 100.0 - ((50.0 - sat) / 50 * 100);
+        } else if (sat > 220) {
+            pt_sat = 100.0 - ((sat - 220.0) / 35.0 * 100.0);
+        } else {
+            pt_sat = 100;
         }
-        pt -= p_tmp;
-        qDebug().noquote() << pt;
-        p_tmp = ((((it->green() + it->blue()) / 2) > it->red()) ? (((it->green() + it->blue()) / 2 - it->red()) * 0.8 - 1.5 * abs(it->green() - it->blue())) : 0);
-        pt += (p_tmp > 0 ? p_tmp : 0);
-        qDebug().noquote() << pt;
-//        p_tmp += 0.5 * it->green();
-        pt = ((pt < 0) ? (weight_of_order[it - palette_16.begin()]) : (1.0 / weight_of_order[it - palette_16.begin()])) * pt;
-//        qDebug().noquote() << ((p_tmp < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()]));
-        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt));
-        if (pt < p_min_b) {
+
+        pt = (pt_val + pt_sat) / 2;
+        pt = weight_of_order[it - palette_16.begin()] * pt;
+
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m %5, %6, weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt), QString::number(pt_val), QString::number(pt_sat));
+        if (pt > p_max_b) {
             color_b = *it;
-            p_min_b = pt;
+            p_max_b = pt;
         }
     }
 
-    if (p_min_a < p_min_b) {
+    if (p_max_a > p_max_b) {
         c = new QColor(color_a);
     } else {
         c = new QColor(color_b);
