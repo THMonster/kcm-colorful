@@ -10,12 +10,21 @@
 #include <QDir>
 #include <QThread>
 
-KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QObject *parent) : QObject(parent)
+KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QString pn, QObject *parent) : QObject(parent)
 {
     QTime time = QTime::currentTime();
     qsrand(static_cast<uint>(time.msec()));
     mConfig = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
 
+    bool ok = false;
+    paletteNum = pn.toInt(&ok);
+    if (ok == true) {
+        if (paletteNum < 1 && paletteNum > 16) {
+            paletteNum = 8;
+        }
+    } else {
+        paletteNum = 8;
+    }
     if (pic == QString("IsoaSFlus-NOPIC")) {
         c = new QColor(colorcode);
     } else {
@@ -41,27 +50,15 @@ KcmColorfulHelper::~KcmColorfulHelper()
 
 void KcmColorfulHelper::run()
 {
-//    QStringList arg;
-
-//    colorExtractProc = new QProcess(this);
-
-//    arg.append("-c");
-//    arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\npalette = color_thief.get_palette(color_count=6)\\nfor color in palette:\\n    print(\"IsoaSFlus,{},{},{}\".format(color[0], color[1], color[2]))\\n    sys.stdout.flush()\\nprint('EOF')\\n\"\"\")");
-//    //arg.append("exec(\"\"\"\\nfrom colorthief import ColorThief\\nimport sys\\ncolor_thief = ColorThief(sys.argv[1])\\ndominant_color = color_thief.get_color(quality=10)\\nprint(\"IsoaSFlus,{},{},{}\".format(dominant_color[0], dominant_color[1], dominant_color[2]))\\nsys.stdout.flush()\\n\"\"\")");
-//    arg.append(wallpaperFilePath);
-
-//    connect(colorExtractProc, &QProcess::readyReadStandardOutput, this, &KcmColorfulHelper::dealStdOut);
-//    colorExtractProc->start("python3", arg);
     if (mmcq != nullptr) {
-        palette = mmcq->get_palette(16);
+        palette = mmcq->get_palette(paletteNum);
+        palette_16 = mmcq->get_palette(16);
         calcColor();
     }
-//    qDebug() << c->red() << c->green() << c->blue();
     qDebug().noquote() << QString("Select: %1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m").arg(QString::number(c->red()), QString::number(c->green()), QString::number(c->blue()));
     readTemplateCS();
     changeColorScheme(tConfig);
     save();
-//    QCoreApplication::exit();
 }
 
 void KcmColorfulHelper::getPrevCSName()
@@ -352,18 +349,24 @@ bool KcmColorfulHelper::isDarkTheme()
 
 void KcmColorfulHelper::calcColor()
 {
-    double p_min = 99999.0;
+    double p_min_a = 99999.0;
+    double p_min_b = 99999.0;
     double pt = 0;
     double p_tmp = 0;
     int p_average = 0;
 
-    double weight_of_order[8] = {1, 1, 1, 1, 0.9, 0.8, 0.7, 0.6};
-    QColor color;
+    double weight_of_order[8] = {1, 1, 1, 0.95, 0.9, 0.8, 0.7, 0.6};
+    QColor color_a;
+    QColor color_b;
     QList<QColor>::iterator it;
     for (it = palette.begin(); it != palette.end() && (it - palette.begin()) < 8; ++it) {
         pt = 100;
         p_average = (it->red() + it->green() + it->blue()) / 3;
-        pt += 4 * sqrt(abs((it->red() + it->green() + it->blue()) - (180 * 3)));
+        p_tmp = 4 * sqrt(abs((it->red() + it->green() + it->blue()) - (170 * 3)));
+        if (p_tmp < 40.0) {
+            p_tmp = 40.0;
+        }
+        pt += p_tmp;
         qDebug().noquote() << pt;
         p_tmp = 1.5 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
         if (p_tmp > 40.0) {
@@ -371,19 +374,54 @@ void KcmColorfulHelper::calcColor()
         }
         pt -= p_tmp;
         qDebug().noquote() << pt;
-        p_tmp = ((((it->green() + it->blue()) / 2) > it->red()) ? (((it->green() + it->blue()) / 2 - it->red()) * 0.8 - abs(it->green() - it->blue())) : 0);
+        p_tmp = ((((it->green() + it->blue()) / 2) > it->red()) ? (((it->green() + it->blue()) / 2 - it->red()) * 0.8 - 1.5 * abs(it->green() - it->blue())) : 0);
         pt += (p_tmp > 0 ? p_tmp : 0);
         qDebug().noquote() << pt;
 //        p_tmp += 0.5 * it->green();
         pt = ((pt < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()])) * pt;
 //        qDebug().noquote() << ((p_tmp < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()]));
         qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt));
-        if (pt < p_min) {
-            color = *it;
-            p_min = pt;
+        if (pt < p_min_a) {
+            color_a = *it;
+            p_min_a = pt;
         }
     }
 
+    qDebug().noquote() << "=============";
+
+    for (it = palette_16.begin(); it != palette_16.end() && (it - palette_16.begin()) < 8; ++it) {
+        pt = 100;
+        p_average = (it->red() + it->green() + it->blue()) / 3;
+        p_tmp = 4 * sqrt(abs((it->red() + it->green() + it->blue()) - (170 * 3)));
+        if (p_tmp < 40.0) {
+            p_tmp = 40.0;
+        }
+        pt += p_tmp;
+        qDebug().noquote() << pt;
+        p_tmp = 1.5 * sqrt((pow(it->red() - p_average, 2) + pow(it->green() - p_average, 2) + pow(it->blue() - p_average, 2)) / 3);
+        if (p_tmp > 40.0) {
+            p_tmp = 40.0;
+        }
+        pt -= p_tmp;
+        qDebug().noquote() << pt;
+        p_tmp = ((((it->green() + it->blue()) / 2) > it->red()) ? (((it->green() + it->blue()) / 2 - it->red()) * 0.8 - 1.5 * abs(it->green() - it->blue())) : 0);
+        pt += (p_tmp > 0 ? p_tmp : 0);
+        qDebug().noquote() << pt;
+//        p_tmp += 0.5 * it->green();
+        pt = ((pt < 0) ? (weight_of_order[it - palette_16.begin()]) : (1.0 / weight_of_order[it - palette_16.begin()])) * pt;
+//        qDebug().noquote() << ((p_tmp < 0) ? (weight_of_order[it - palette.begin()]) : (1.0 / weight_of_order[it - palette.begin()]));
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt));
+        if (pt < p_min_b) {
+            color_b = *it;
+            p_min_b = pt;
+        }
+    }
+
+    if (p_min_a < p_min_b) {
+        c = new QColor(color_a);
+    } else {
+        c = new QColor(color_b);
+    }
 
 
 //    int d_min = INT_MAX;
@@ -397,28 +435,7 @@ void KcmColorfulHelper::calcColor()
 //        }
 //    }
 //    c = new QColor(colordata[index][0], colordata[index][1], colordata[index][2]);
-    c = new QColor(color);
+//    c = new QColor(color);
 }
-
-//void KcmColorfulHelper::dealStdOut()
-//{
-//    while(!colorExtractProc->atEnd())
-//    {
-//        QString rgb(colorExtractProc->readLine());
-//        if (rgb.contains("IsoaSFlus")) {
-//            qDebug() << rgb;
-//            QStringList rgbList = rgb.split(",");
-//            palette.append(QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt()));
-////            c = new QColor(rgbList[1].toInt(), rgbList[2].toInt(), rgbList[3].toInt());
-//        } else if (rgb.contains("EOF")) {
-//            calcColor();
-//            qDebug() << c->red() << c->green() << c->blue();
-//            readTemplateCS();
-//            changeColorScheme(tConfig);
-//            save();
-//            QCoreApplication::exit();
-//        }
-//    }
-//}
 
 

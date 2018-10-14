@@ -15,12 +15,13 @@ class KcmColorfulHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit KcmColorfulHelper(QString pic, QString colorcode, QObject *parent = nullptr);
+    explicit KcmColorfulHelper(QString pic, QString colorcode, QString pn, QObject *parent = nullptr);
     ~KcmColorfulHelper();
     void run();
 
 private:
     QList<QColor> palette;
+    QList<QColor> palette_16;
     MMCQ *mmcq = nullptr;
     QColor *c = nullptr;
     QString colorSchemeName;
@@ -28,6 +29,7 @@ private:
     KSharedConfigPtr mConfig;
     KSharedConfigPtr tConfig;
     QString wallpaperFilePath;
+    int paletteNum = 8;
 //    QProcess *colorExtractProc = nullptr;
     void getPrevCSName();
     void readTemplateCS();
