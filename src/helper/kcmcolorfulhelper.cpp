@@ -351,7 +351,8 @@ void KcmColorfulHelper::calcColor()
     double pt = 0;
     double pt_val = 0;
     double pt_sat = 0;
-//    double hue = 0;
+    double pt_hue = 0;
+    double hue = 0;
     double sat = 0;
     double val = 0;
     double A = 0;
@@ -364,8 +365,10 @@ void KcmColorfulHelper::calcColor()
         pt = 0;
         pt_val = 0;
         pt_sat = 0;
+        pt_hue = 0;
         val = it->value();
         sat = it->saturation();
+        hue = it->hue();
 
         A = 220.0 + (0.137 * (255.0 - sat));
         if (val < A) {
@@ -374,18 +377,28 @@ void KcmColorfulHelper::calcColor()
             pt_val = 80.0 + ((val - A) / (255.0 - A) * 20.0);
         }
 
-        if (sat < 80) {
-            pt_sat = 100.0 - ((80.0 - sat) / 80.0 * 100.0);
+        if (sat < 70) {
+            pt_sat = 100.0 - ((70.0 - sat) / 70.0 * 100.0);
         } else if (sat > 220) {
             pt_sat = 100.0 - ((sat - 220.0) / 35.0 * 100.0);
         } else {
             pt_sat = 100;
         }
 
-        pt = (pt_val + pt_sat) / 2;
+        if (hue > 159 && hue < 186) {
+            if (hue < 180) {
+                pt_hue = 100.0 - (50.0 * (hue - 159.0) / 21.0);
+            } else {
+                pt_hue = 100.0 - (50.0 * (186.0 - hue) / 6.0);
+            }
+        } else {
+            pt_hue = 100;
+        }
+
+        pt = (pt_val + pt_sat + pt_hue) / 3;
         pt = weight_of_order[it - palette.begin()] * pt;
 
-        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m %5, %6, weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt), QString::number(pt_val), QString::number(pt_sat));
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m %5, %6, %7, weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt), QString::number(pt_val), QString::number(pt_sat), QString::number(pt_hue));
         if (pt > p_max_a) {
             color_a = *it;
             p_max_a = pt;
@@ -398,8 +411,10 @@ void KcmColorfulHelper::calcColor()
         pt = 0;
         pt_val = 0;
         pt_sat = 0;
+        pt_hue = 0;
         val = it->value();
         sat = it->saturation();
+        hue = it->hue();
 
         A = 220 + (0.137 * (255 - sat));
         if (val < A) {
@@ -408,18 +423,29 @@ void KcmColorfulHelper::calcColor()
             pt_val = 80 + ((val - A) / (255 - A) * 20);
         }
 
-        if (sat < 80) {
-            pt_sat = 100.0 - ((80.0 - sat) / 80.0 * 100);
+        if (sat < 70) {
+            pt_sat = 100.0 - ((70.0 - sat) / 70.0 * 100);
         } else if (sat > 220) {
             pt_sat = 100.0 - ((sat - 220.0) / 35.0 * 100.0);
         } else {
             pt_sat = 100;
         }
 
-        pt = (pt_val + pt_sat) / 2;
+        if (hue > 159 && hue < 186) {
+            if (hue < 180) {
+                pt_hue = 100.0 - (50.0 * (hue - 159.0) / 21.0);
+            } else {
+                pt_hue = 100.0 - (50.0 * (186.0 - hue) / 6.0);
+            }
+        } else {
+            pt_hue = 100;
+        }
+
+
+        pt = (pt_val + pt_sat + pt_hue) / 3;
         pt = weight_of_order[it - palette_16.begin()] * pt;
 
-        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m %5, %6, weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt), QString::number(pt_val), QString::number(pt_sat));
+        qDebug().noquote() << QString("%1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m %5, %6, %7, weight: %4").arg(QString::number(it->red()), QString::number(it->green()), QString::number(it->blue()), QString::number(pt), QString::number(pt_val), QString::number(pt_sat), QString::number(pt_hue));
         if (pt > p_max_b) {
             color_b = *it;
             p_max_b = pt;
@@ -427,8 +453,10 @@ void KcmColorfulHelper::calcColor()
     }
 
     if (p_max_a > p_max_b) {
+        color_a.setHsv(color_a.hue(), color_a.saturation(), ((color_a.value() + 50 > 255) ? 255 : (color_a.value() + 50)));
         c = new QColor(color_a);
     } else {
+        color_b.setHsv(color_b.hue(), color_b.saturation(), ((color_b.value() + 50 > 255) ? 255 : (color_b.value() + 50)));
         c = new QColor(color_b);
     }
 
