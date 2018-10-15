@@ -26,6 +26,8 @@ MMCQ::~MMCQ()
 
 QList<QColor> MMCQ::get_palette(int color_count, int quality)
 {
+    pixels.clear();
+    histo.clear();
     QList<QColor> ret;
     for (int i = 0; i < w; i = i + quality)
         for (int j = 0; j < h; j++) {

@@ -374,8 +374,8 @@ void KcmColorfulHelper::calcColor()
             pt_val = 80.0 + ((val - A) / (255.0 - A) * 20.0);
         }
 
-        if (sat < 50) {
-            pt_sat = 100.0 - ((50.0 - sat) / 50.0 * 100.0);
+        if (sat < 80) {
+            pt_sat = 100.0 - ((80.0 - sat) / 80.0 * 100.0);
         } else if (sat > 220) {
             pt_sat = 100.0 - ((sat - 220.0) / 35.0 * 100.0);
         } else {
@@ -408,8 +408,8 @@ void KcmColorfulHelper::calcColor()
             pt_val = 80 + ((val - A) / (255 - A) * 20);
         }
 
-        if (sat < 50) {
-            pt_sat = 100.0 - ((50.0 - sat) / 50 * 100);
+        if (sat < 80) {
+            pt_sat = 100.0 - ((80.0 - sat) / 80.0 * 100);
         } else if (sat > 220) {
             pt_sat = 100.0 - ((sat - 220.0) / 35.0 * 100.0);
         } else {
