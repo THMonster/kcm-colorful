@@ -10,7 +10,7 @@
 #include <QDir>
 #include <QThread>
 
-KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QString pn, QObject *parent) : QObject(parent)
+KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QString pn, bool setWPFlag, QObject *parent) : QObject(parent)
 {
     QTime time = QTime::currentTime();
     qsrand(static_cast<uint>(time.msec()));
@@ -30,6 +30,9 @@ KcmColorfulHelper::KcmColorfulHelper(QString pic, QString colorcode, QString pn,
     } else {
         wallpaperFilePath = pic;
         mmcq = new MMCQ(wallpaperFilePath);
+        if (setWPFlag == true) {
+            setWallpaper(pic);
+        }
     }
 
 
@@ -472,7 +475,19 @@ void KcmColorfulHelper::calcColor()
 //        }
 //    }
 //    c = new QColor(colordata[index][0], colordata[index][1], colordata[index][2]);
-//    c = new QColor(color);
+    //    c = new QColor(color);
+}
+
+void KcmColorfulHelper::setWallpaper(QString pic)
+{
+    QProcess::execute("qdbus", QStringList() << "org.kde.plasmashell" << "/PlasmaShell" << "org.kde.PlasmaShell.evaluateScript" << QString("var a = desktops();\
+                      for(i = 0; i < a.length; i++){\
+                        d = a[i];d.wallpaperPlugin = \"org.kde.image\";\
+                        d.currentConfigGroup = Array(\"Wallpaper\", \"org.kde.image\", \"General\");\
+                        d.writeConfig(\"Image\", \"file://%1\");\
+                        d.writeConfig(\"FillMode\", 2);\
+                        d.writeConfig(\"Color\", \"#000\");\
+                      }").arg(QFileInfo(pic).canonicalFilePath()));
 }
 
 
