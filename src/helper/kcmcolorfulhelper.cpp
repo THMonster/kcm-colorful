@@ -388,11 +388,11 @@ void KcmColorfulHelper::calcColor()
             pt_sat = 100;
         }
 
-        if (hue > 159 && hue < 186) {
+        if (hue > 159 && hue < 196) {
             if (hue < 180) {
                 pt_hue = 100.0 - (50.0 * (hue - 159.0) / 21.0);
             } else {
-                pt_hue = 100.0 - (50.0 * (186.0 - hue) / 6.0);
+                pt_hue = 100.0 - (50.0 * (196.0 - hue) / 16.0);
             }
         } else {
             pt_hue = 100;
@@ -434,11 +434,11 @@ void KcmColorfulHelper::calcColor()
             pt_sat = 100;
         }
 
-        if (hue > 159 && hue < 186) {
+        if (hue > 159 && hue < 196) {
             if (hue < 180) {
                 pt_hue = 100.0 - (50.0 * (hue - 159.0) / 21.0);
             } else {
-                pt_hue = 100.0 - (50.0 * (186.0 - hue) / 6.0);
+                pt_hue = 100.0 - (50.0 * (196.0 - hue) / 16.0);
             }
         } else {
             pt_hue = 100;
@@ -456,10 +456,16 @@ void KcmColorfulHelper::calcColor()
     }
 
     if (p_max_a > p_max_b) {
-        color_a.setHsv(color_a.hue(), color_a.saturation(), ((color_a.value() + 50 > 255) ? 255 : (color_a.value() + 50)));
+        A = 220.0 + (0.137 * (255.0 - color_a.saturation()));
+        if (color_a.value() < A) {
+            color_a.setHsv(color_a.hue(), color_a.saturation(), static_cast<int>(A));
+        }
         c = new QColor(color_a);
     } else {
-        color_b.setHsv(color_b.hue(), color_b.saturation(), ((color_b.value() + 50 > 255) ? 255 : (color_b.value() + 50)));
+        A = 220.0 + (0.137 * (255.0 - color_b.saturation()));
+        if (color_b.value() < A) {
+            color_b.setHsv(color_b.hue(), color_b.saturation(), static_cast<int>(A));
+        }
         c = new QColor(color_b);
     }
 
