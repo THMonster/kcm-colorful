@@ -464,11 +464,11 @@ void KcmColorfulHelper::calcColor()
     A = 220.0 + (0.137 * (255.0 - color.saturation()));
     qDebug() << A;
     if (color.value() < A) {
-        if ((A - color.value()) <= 50) {
+        if ((A - color.value()) <= 80) {
             color.setHsv(color.hue(), color.saturation(), static_cast<int>(A));
-        } else if (((A - color.value()) > 50) && ((A - color.value()) <= 100)) {
-            qDebug() << (((0.5 + (0.5 * ((color.value() - (A - 100)) / 50))) * (A - color.value())) + color.value());
-            color.setHsv(color.hue(), color.saturation(), static_cast<int>(((0.5 + (0.5 * ((color.value() - (A - 100)) / 50))) * (A - color.value())) + color.value()));
+        } else if (((A - color.value()) > 80) && ((A - color.value()) <= 130)) {
+            qDebug() << (((0.5 + (0.5 * ((color.value() - (A - 130)) / 50))) * (A - color.value())) + color.value());
+            color.setHsv(color.hue(), color.saturation(), static_cast<int>(((0.5 + (0.5 * ((color.value() - (A - 130)) / 50))) * (A - color.value())) + color.value()));
         } else {
             color.setHsv(color.hue(), color.saturation(), static_cast<int>(((A - color.value()) / 2) + color.value()));
         }
