@@ -6,7 +6,7 @@
 #include "mmcq.h"
 
 
-MMCQ::MMCQ(QString file)
+MMCQ::MMCQ(QString file, bool debug_flag, bool kcm_flag)
 {
 
     QImage i(file);
@@ -17,6 +17,8 @@ MMCQ::MMCQ(QString file)
     img = new QImage(i.convertToFormat(QImage::Format_RGBA8888));
     h = img->height();
     w = img->width();
+    this->debug_flag = debug_flag;
+    this->kcm_flag = kcm_flag;
 }
 
 MMCQ::~MMCQ()

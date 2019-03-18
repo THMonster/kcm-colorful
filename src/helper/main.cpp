@@ -10,14 +10,22 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
 //    parser.addVersionOption();
 
-    QCommandLineOption pictureOption(QStringList() << "p" << "picture", "Picture to extract color.", "file", "IsoaSFlus-NOPIC");
+    QCommandLineOption pictureOption(QStringList() << "p" << "picture", "Picture to extract color.", "file", "kcmcolorful-NOPIC");
     parser.addOption(pictureOption);
     QCommandLineOption colorOption(QStringList() << "c" << "color", "Set color manually, eg: #1234ef.", "colorcode", "#EFEFEF");
     parser.addOption(colorOption);
-    QCommandLineOption paletteOption(QStringList() << "n" << "palette-number", "Set the number of colors of palette in the first color extraction. Valid number is between 1 to 16, default is 8.", "int", "8");
+    QCommandLineOption paletteOption("palette-number", "Set the number of colors of palette in the first color extraction. Valid number is between 1 to 16, default is 8.", "int", "8");
+    paletteOption.setFlags(QCommandLineOption::HiddenFromHelp);
     parser.addOption(paletteOption);
     QCommandLineOption setWPOption(QStringList() << "s" << "set-as-wallpaper", "Set picture specified by \"-p\" as wallpaper.");
     parser.addOption(setWPOption);
+    QCommandLineOption debugOption(QStringList() << "d" << "debug", "Show debug info.");
+    parser.addOption(debugOption);
+    QCommandLineOption kcmOption("kcm");
+    kcmOption.setFlags(QCommandLineOption::HiddenFromHelp);
+    parser.addOption(kcmOption);
+    QCommandLineOption colorNumOption(QStringList() << "n" << "number", "Select the Nth color in candidate list. Default is 1.", "int", "1");
+    parser.addOption(colorNumOption);
 
     parser.process(a);
 
@@ -26,7 +34,15 @@ int main(int argc, char *argv[])
         parser.showHelp();
     }
 
-    KcmColorfulHelper kch(parser.value(pictureOption), parser.value(colorOption), parser.value(paletteOption), parser.isSet(setWPOption));
+    QStringList args;
+    args << parser.value(pictureOption);
+    args << parser.value(colorOption);
+    args << parser.value(paletteOption);
+    args << (parser.isSet(setWPOption) ? "true" : " false");
+    args << (parser.isSet(debugOption) ? "true" : " false");
+    args << (parser.isSet(kcmOption) ? "true" : " false");
+    args << parser.value(colorNumOption);
+    KcmColorfulHelper kch(args);
     kch.run();
 
 //    return a.exec();

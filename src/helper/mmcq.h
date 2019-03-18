@@ -21,13 +21,15 @@ public:
 class MMCQ
 {
 public:
-    explicit MMCQ(QString file);
+    explicit MMCQ(QString file, bool debug_flag, bool kcm_flag);
     ~MMCQ();
 
     QList<QColor> get_palette(int color_count=10, int quality=10);
     int get_color_index(int r, int g, int b);
 
 private:
+    bool debug_flag = false;
+    bool kcm_flag = false;
     int sigbits = 5;
     int rshift = 8 - sigbits;
     double fract_by_populations = 0.75;

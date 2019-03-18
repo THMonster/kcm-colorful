@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/ColorUnit.qml</file>
+        <file>qml/ColorWidget.qml</file>
+        <file>qml/Header.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/test.qml</file>
+        <file>qml/Wallpaper.qml</file>
+        <file>qml/WButton.qml</file>
+        <file>artworks/gen-colors.svg</file>
+        <file>artworks/refresh.svg</file>
+        <file>qml/ColorUnitW.qml</file>
+    </qresource>
+</RCC>

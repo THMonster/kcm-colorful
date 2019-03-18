@@ -1,5 +1,5 @@
 # KCM-Colorful
-Change your KDE Plasma's color based on a picture.
+Change your KDE Plasma's color based on your wallpaper.
 
 ## Requirements
 * Qt5
@@ -33,24 +33,23 @@ Thanks for [@VOID001](https://github.com/VOID001)'s work.
 ## TODO
 - [x] Implement CLI helper
 - [x] Port color extraction code to C++
-- [ ] Implement KCM
+- [x] Implement KCM
 - [ ] Improve color selection by ML
 
 ## Postscript
-This project is very prototype yet. It has a cli helper now. **Usage**:
+Besides KCM, this project also provides a CLI program that could be used by your script:
 ```
-Usage: kcmcolorfulhelper [options]
-Helper for kcm-colorful.
-Project address: https://github.com/IsoaSFlus/kcm-colorful
-
-Options:
-  -h, --help                  Displays this help.
-  -p, --picture <file>        Picture to extract color.
-  -c, --color <colorcode>     Set color manually, eg: #1234ef.
-  -n, --palette-number <int>  Set the number of colors of palette in the first
-                              color extraction. Valid number is between 1 to 16,
-                              default is 8.
-  -s, --set-as-wallpaper      Set picture specified by "-p" as wallpaper.
+Usage: kcmcolorfulhelper [options]                                            
+Helper for kcm-colorful.                                                
+Project address: https://github.com/IsoaSFlus/kcm-colorful                     
+                                                                              
+Options:                                                  
+  -h, --help               Displays this help.                              
+  -p, --picture <file>     Picture to extract color.     
+  -c, --color <colorcode>  Set color manually, eg: #1234ef.                   
+  -s, --set-as-wallpaper   Set picture specified by "-p" as wallpaper.          
+  -d, --debug              Show debug info.                                     
+  -n, --number <int>       Select the Nth color in candidate list. Default is 1.   
 ```
 
 **If you want to make your KDE look like the screenshots above, just follow these steps.**

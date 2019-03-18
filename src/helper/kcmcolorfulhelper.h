@@ -15,7 +15,7 @@ class KcmColorfulHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit KcmColorfulHelper(QString pic, QString colorcode, QString pn, bool setWPFlag = false, QObject *parent = nullptr);
+    explicit KcmColorfulHelper(QStringList args, QObject *parent = nullptr);
     ~KcmColorfulHelper();
     void run();
 
@@ -24,13 +24,16 @@ private:
     QList<QColor> palette_16;
     MMCQ *mmcq = nullptr;
     QColor *c = nullptr;
+    QMap<double, QColor> pt_and_color;
     QString colorSchemeName;
     QString prevColorSchemeName;
     KSharedConfigPtr mConfig;
     KSharedConfigPtr tConfig;
     QString wallpaperFilePath;
     int paletteNum = 8;
-//    QProcess *colorExtractProc = nullptr;
+    int selectNum = 1;
+    bool kcm_flag = false;
+    bool debug_flag = false;
     void getPrevCSName();
     void readTemplateCS();
     void changeColorScheme();
@@ -42,6 +45,7 @@ private:
     bool isDarkTheme();
     void calcColor();
     void setWallpaper(QString pic);
+    QColor color_refine(QColor color);
 
 signals:
 

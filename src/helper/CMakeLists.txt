@@ -1,8 +1,8 @@
-add_executable(${PROJECT_NAME} "main.cpp"
+add_executable(kcmcolorfulhelper "main.cpp"
                                "kcmcolorfulhelper.cpp"
                                "mmcq.cpp")
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core
+target_link_libraries(kcmcolorfulhelper Qt5::Core
                                       Qt5::DBus
                                       KF5::ConfigCore
                                       KF5::ConfigGui
