@@ -9,10 +9,11 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-Item {
+Rectangle {
     id: root
     implicitWidth: 500
     implicitHeight: 700
+    color: PlasmaCore.ColorScope.backgroundColor
 
     Header {
         anchors {

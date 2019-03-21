@@ -14,6 +14,7 @@ Rectangle {
     property string cw_type
     implicitHeight: gv.cellWidth
         /* + units.smallSpacing */
+    color: "transparent"
 
     ListModel {
         id: colorModel
@@ -42,6 +43,13 @@ Rectangle {
             c_name: name
         }
     }
+
+    /* ColorUnit { */
+    /*     id: colorDelegate */
+    /*     cu_index: index */
+    /*     inner_color: c */
+    /*     c_name: name */
+    /* } */
 
     GridView {
         id: gv
