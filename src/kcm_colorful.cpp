@@ -123,22 +123,16 @@ void KCMColorful::addColorGV1(QString color)
 
 void KCMColorful::set_wp_view()
 {
-    KSharedConfigPtr cfg;
-    cfg = KSharedConfig::openConfig(QStringLiteral("plasma-org.kde.plasma.desktop-appletsrc"));
-    KConfigGroup kcg(cfg, "Containments");
-    for (auto &g : kcg.groupList()) {
-        KConfigGroup kcg_t(&kcg, g);
-        if (kcg_t.groupList().contains(QStringLiteral("Wallpaper"))) {
-            KConfigGroup kcg_tt(&kcg_t, QStringLiteral("Wallpaper"));
-            if (kcg_tt.groupList().contains(QStringLiteral("org.kde.image"))) {
-                KConfigGroup kcg_ttt(&kcg_tt, QStringLiteral("org.kde.image"));
-                KConfigGroup kcg_tttt(&kcg_ttt, QStringLiteral("General"));
-                current_wallpaper = kcg_tttt.readEntry(QStringLiteral("Image"), QStringLiteral(""));
-                break;
-            }
-        }
-    }
-    cfg->markAsClean();
+    QProcess p;
+    p.start(QStringLiteral("bash"), QStringList() << QStringLiteral("-c") <<
+                  QStringLiteral("qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \"var d = desktops();\
+                                 d[0].currentConfigGroup = Array(\\\"Wallpaper\\\", \\\"org.kde.image\\\", \\\"General\\\");\
+                                 a = d[0].readConfig(\\\"Image\\\");a.a()\" | sed -n 's/.*\\(file:\\/\\/.*\\) is not a function.*/\\1/p'"));
+
+    p.waitForFinished();
+    QByteArray stdout = p.readAll();
+    stdout.chop(1);
+    current_wallpaper = QString::fromUtf8(stdout);
     qDebug() << current_wallpaper;
     extracted_flag = false;
     QQuickItem *wp = root_qml->rootObject()->findChild<QQuickItem *>(QStringLiteral("wp_view"));
