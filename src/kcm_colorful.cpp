@@ -25,6 +25,13 @@ K_PLUGIN_FACTORY(KCMColorfulFactory, registerPlugin<KCMColorful>();)
 KCMColorful::KCMColorful(QWidget *parent, const QVariantList &args)
     : KCModule(parent)
 {
+    KAboutData* aboutData = new KAboutData(QStringLiteral("kcm-colorful"), i18n("Colorful"), QLatin1String(PROJECT_VERSION));
+    aboutData->setShortDescription(i18n("Make your KDE Plasma colorful"));
+    aboutData->setLicense(KAboutLicense::GPL_V2);
+    aboutData->setHomepage(QStringLiteral("https://github.com/IsoaSFlus/kcm-colorful"));
+    aboutData->addAuthor(QStringLiteral("IsoaSFlus"), i18n("Author"), QStringLiteral("me@isoasflus.me"));
+    setAboutData(aboutData);
+
     QVBoxLayout *vb;
     vb = new QVBoxLayout(this);
     root_qml = new QQuickWidget;
@@ -43,7 +50,6 @@ KCMColorful::KCMColorful(QWidget *parent, const QVariantList &args)
     QQuickItem *wb_refresh = object->findChild<QQuickItem *>(QStringLiteral("wb_refresh"));
     QQuickItem *cuw_row = object->findChild<QQuickItem *>(QStringLiteral("cuw_row"));
     QList<QQuickItem *> gv = object->findChildren<QQuickItem *>(QStringLiteral("grid_view"));
-//    QList<QQuickItem *> gv_model = root_qml->rootObject()->findChildren<QQuickItem *>(QStringLiteral("gv_model"));
     QObject::connect(wb_generate, SIGNAL(clicked()), this, SLOT(runHelper()));
     QObject::connect(wb_refresh, SIGNAL(clicked()), this, SLOT(set_wp_view()));
     QObject::connect(cuw_row, SIGNAL(cuw_clicked(QString)), this, SLOT(apply_color(QString)));
@@ -55,6 +61,7 @@ KCMColorful::KCMColorful(QWidget *parent, const QVariantList &args)
 
 KCMColorful::~KCMColorful()
 {
+    root_qml->deleteLater();
     saveConfig();
 }
 

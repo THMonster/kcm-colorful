@@ -9,7 +9,7 @@ set(kcm_file_SRCS
 
 qt5_add_resources(kcm_file_SRCS res.qrc)
 add_library(kcm_colorful MODULE ${kcm_file_SRCS})
-
+target_compile_definitions(kcm_colorful PRIVATE -DPROJECT_VERSION="${PROJECT_VERSION}")
 target_link_libraries(kcm_colorful
   KF5::KIOWidgets
   KF5::CoreAddons
