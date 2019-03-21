@@ -84,7 +84,7 @@ void KcmColorfulHelper::run()
         std::cout << std::endl;
     } else {
         if (!c) {
-            while (i <= 3) {
+            while (i <= 4) {
                 auto it = pt_and_color.cend() - i;
                 QColor color = it.value();
                 color = color_refine(color);
@@ -101,7 +101,8 @@ void KcmColorfulHelper::run()
             qDebug().noquote() << QString("Choose: %1, %2, %3 \033[48;2;%1;%2;%3m     \033[0m").arg(QString::number(c->red()), QString::number(c->green()), QString::number(c->blue()));
         }
         readTemplateCS();
-        changeColorScheme(tConfig);
+//        changeColorScheme(tConfig);
+        changeColorSchemeB();
         save();
         mConfig->markAsClean();
         tConfig->markAsClean();
@@ -171,6 +172,15 @@ void KcmColorfulHelper::changeColorScheme()
             groupWMOut.writeEntry(coloritem, defaultWMColors.value(i));
             ++i;
     }
+}
+
+void KcmColorfulHelper::changeColorSchemeB()
+{
+    KConfigGroup group(mConfig, "Colors:View");
+    group.writeEntry("DecorationHover", *c);
+    KConfigGroup groupWM(mConfig, "WM");
+    groupWM.writeEntry("activeBackground", *c);
+    groupWM.writeEntry("inactiveBackground", *c);
 }
 
 void KcmColorfulHelper::changeColorScheme(KSharedConfigPtr config)

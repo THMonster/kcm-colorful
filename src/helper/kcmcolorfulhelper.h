@@ -37,6 +37,7 @@ private:
     void getPrevCSName();
     void readTemplateCS();
     void changeColorScheme();
+    void changeColorSchemeB(); // change ColorScheme based on user's ColorScheme file
     void changeColorScheme(KSharedConfigPtr config);
     void save();
     void genCSName();
