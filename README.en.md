@@ -6,6 +6,7 @@ Change your KDE Plasma's color based on your wallpaper.
 * KDE Frameworks 5
 * cmake
 * extra-cmake-modules
+* GNU gettext utilities
 
 ## Build
 ```
@@ -25,6 +26,12 @@ sudo make install
 yaourt -S kcm-colorful-git # or any other aur helper
 ```
 Thanks for [@VOID001](https://github.com/VOID001)'s work.
+
+### Archlinux ([ArchlinuxCN](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#archlinuxcn) repo)
+```
+sudo pacman -S kcm-colorful-git
+```
+Thanks for [@MarvelousBlack](https://github.com/MarvelousBlack)'s maintenance.
 
 ## Screenshots
 ![a](https://raw.githubusercontent.com/IsoaSFlus/kcm-colorful/master/screenshots/a.png)

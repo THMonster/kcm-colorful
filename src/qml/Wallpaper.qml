@@ -147,7 +147,7 @@ Item {
             WButton {
                 id: wb_refresh
                 objectName: "wb_refresh"
-                text: 'Refresh wallpaper'
+                text: i18n("Refresh wallpaper")
                 anchors {
                     /* horizontalCenter: wallpaper.horizontalCenter */
                     /* centerIn: wallpaper */
@@ -161,7 +161,7 @@ Item {
             WButton {
                 id: wb_generate
                 objectName: "wb_generate"
-                text: 'Generate colors based on wallpaper'
+                text: i18n("Generate colors based on wallpaper")
                 iconSource: ':/artworks/gen-colors.svg'
                 onClicked: {
                     wallpaper.state = "generated"

@@ -4,6 +4,7 @@
 #include <QQuickWidget>
 #include <KF5/KConfigWidgets/KColorScheme>
 #include <KF5/KConfigCore/KConfigGroup>
+#include <KDeclarative/KDeclarative>
 
 class KCMColorful : public KCModule
 {
@@ -26,6 +27,7 @@ private:
     bool extracted_flag = false;
     QStringList colors;
     QProcess *helper = nullptr;
+    KDeclarative::KDeclarative *kdeclarative = nullptr;
 
 
 public Q_SLOTS:

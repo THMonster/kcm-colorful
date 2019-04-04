@@ -16,6 +16,7 @@ target_link_libraries(kcm_colorful
   KF5::ConfigWidgets
   KF5::I18n
   KF5::Solid
+  KF5::Declarative
   Qt5::Core
   Qt5::Gui
   Qt5::QuickControls2

@@ -22,7 +22,7 @@ Rectangle {
             right: parent.right
         }
         id: h1
-        text: 'Wallpaper'
+        text: i18n("Wallpaper")
     }
 
     Wallpaper {
@@ -41,7 +41,7 @@ Rectangle {
             right: parent.right
         }
         id: h2
-        text: 'Recent Colors'
+        text: i18n("Recent Colors")
     }
 
     ColorWidget {
@@ -61,7 +61,7 @@ Rectangle {
             right: parent.right
         }
         id: h3
-        text: 'Recommended Colors'
+        text: i18n("Recommended Colors")
     }
 
     ColorWidget {

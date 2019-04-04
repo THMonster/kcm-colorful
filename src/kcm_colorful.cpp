@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <KLocalizedString>
+#include <KDeclarative/KDeclarative>
 
 
 
@@ -29,14 +30,19 @@ KCMColorful::KCMColorful(QWidget *parent, const QVariantList &args)
     aboutData->setShortDescription(i18n("Make your KDE Plasma colorful"));
     aboutData->setLicense(KAboutLicense::GPL_V2);
     aboutData->setHomepage(QStringLiteral("https://github.com/IsoaSFlus/kcm-colorful"));
-    aboutData->addAuthor(QStringLiteral("IsoaSFlus"), i18n("Author"), QStringLiteral("me@isoasflus.me"));
+    aboutData->addAuthor(QStringLiteral("IsoaSFlus"), i18n("Author"), QStringLiteral("me@isoasflus.com"));
     setAboutData(aboutData);
-
     QVBoxLayout *vb;
     vb = new QVBoxLayout(this);
+
     root_qml = new QQuickWidget;
+    kdeclarative = new KDeclarative::KDeclarative();
+    kdeclarative->setTranslationDomain(QStringLiteral("kcm_colorful"));
+    kdeclarative->setDeclarativeEngine(root_qml->engine());
+    kdeclarative->setupContext();
     root_qml->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     root_qml->setResizeMode(QQuickWidget::SizeRootObjectToView);
+
     vb->addWidget(root_qml);
     setLayout(vb);
 
@@ -61,8 +67,9 @@ KCMColorful::KCMColorful(QWidget *parent, const QVariantList &args)
 
 KCMColorful::~KCMColorful()
 {
-    root_qml->deleteLater();
     saveConfig();
+    delete root_qml;
+    delete kdeclarative;
 }
 
 void KCMColorful::readConfig()
