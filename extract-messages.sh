@@ -9,9 +9,6 @@ cd ${BASEDIR}
 # we use simple sorting to make sure the lines do not jump around too much from system to system
 find . -name '*.rc' -o -name '*.ui' -o -name '*.kcfg'| sort > ${WDIR}/rcfiles.list
 xargs --arg-file=${WDIR}/rcfiles.list extractrc > ${WDIR}/rc.cpp
-# additional string for KAboutData
-# echo 'i18nc("NAME OF TRANSLATORS","Your names");' >> ${WDIR}/rc.cpp
-# echo 'i18nc("EMAIL OF TRANSLATORS","Your emails");' >> ${WDIR}/rc.cpp
 cd ${WDIR}
 echo "Done preparing rc files"
 
@@ -33,15 +30,12 @@ echo "Merging translations"
 catalogs=`find . -name '*.po'`
 for cat in $catalogs; do
   echo $cat
-  msgmerge -o $cat.new $cat ${PROJECT}.pot
-  mv $cat.new $cat
+  msgmerge -q --backup=none -U $cat ${PROJECT}.pot
 done
 echo "Done merging translations"
 
 
 echo "Cleaning up"
 cd ${WDIR}
-rm rcfiles.list
-rm infiles.list
-rm rc.cpp
-echo "Done"
+rm rcfiles.list infiles.list rc.cpp
+echo "All Done! :)"
