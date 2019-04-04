@@ -13,7 +13,10 @@ X-KDE-System-Settings-Parent-Category=appearance
 
 Name=Colorful
 Name[zh_CN]=多彩
+Name[zh_TW]=多彩
 Comment=Make your KDE Plasma colorful
 Comment[zh_CN]=让您的KDE Plasma丰富多彩
+Comment[zh_TW]=讓您的 KDE Plasma 更多彩
 X-KDE-Keywords=Color, Theme
 X-KDE-Keywords[zh_CN]=Color, Theme,色彩,颜色,主题
+X-KDE-Keywords[zh_TW]=Color, Theme, 色彩, 顏色, 主題
