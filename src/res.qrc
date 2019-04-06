@@ -9,5 +9,6 @@
         <file>artworks/gen-colors.svg</file>
         <file>artworks/refresh.svg</file>
         <file>qml/ColorUnitW.qml</file>
+        <file>qml/colors.js</file>
     </qresource>
 </RCC>

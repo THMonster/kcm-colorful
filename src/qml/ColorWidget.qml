@@ -8,6 +8,8 @@ import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
+import "./colors.js" as ColorTable
+
 
 Rectangle {
     id: root
@@ -56,11 +58,13 @@ Rectangle {
         objectName: "grid_view"
         /* Layout.alignment: Qt.AlignCenter */
         signal cu_clicked(string color)
+        clip: true
 
         anchors {
             fill: parent
+            /* topMargin: units.smallSpacing * 1.3 */
         }
-        cellWidth: units.iconSizes.medium + units.smallSpacing
+        cellWidth: units.iconSizes.medium * 1.5+ units.smallSpacing
         cellHeight: cellWidth
         /* anchors.fill: parent */
         model: colorModel
@@ -84,6 +88,11 @@ Rectangle {
             NumberAnimation { properties: "x,y"; duration: 300; easing.type: Easing.OutCubic}
         }
 
+        function add_user_color(color_code) {
+            if (root.cw_type == "cw2") {
+                colorModel.insert(colorModel.count - 1, {"name": "user", "c": color_code})
+            }
+        }
         function prepend_color(color_code) {
             if (root.cw_type == "cw1") {
                 var i = 0;
@@ -134,6 +143,10 @@ Rectangle {
 
         Component.onCompleted: {
             if (root.cw_type == "cw2") {
+                var default_colors = ColorTable.color_table()
+                for (var i = default_colors.length; i > 0; --i) {
+                    colorModel.insert(0, default_colors[i-1])
+                }
                 colorModel.append({"name": "own", "c": "grey"})
             }
         }

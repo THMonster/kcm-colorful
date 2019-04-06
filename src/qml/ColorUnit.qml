@@ -13,8 +13,8 @@ Item {
     id: root
     property alias inner_color: inner.color
     property string c_name: "null"
-    property int cu_index 
-    width: inner.width
+    property int cu_index
+    width: inner.width * 1.3
     height: width
     state: "off"
     states: [
@@ -57,7 +57,7 @@ Item {
     ]
     Rectangle {
         id: inner
-        width: units.iconSizes.medium
+        width: units.iconSizes.medium * 1.2
         height: width
         radius: width / 2
         border.width: width * 0.03
@@ -77,7 +77,7 @@ Item {
             }
             onClicked: {
                 if(mouse.button & Qt.RightButton) {
-                    if (root.c_name != "own") {
+                    if (root.c_name != "own" && root.c_name != "default") {
                         gv.remove_color(root.cu_index);
                     }
                 } else {
@@ -95,7 +95,7 @@ Item {
             /* title: "Please choose a color" */
             onAccepted: {
                 /* console.log("You chose: " + colorDialog.color) */
-                gv.prepend_color("" + colorDialog.color)
+                gv.add_color("" + colorDialog.color)
                 Qt.quit()
             }
             onRejected: {

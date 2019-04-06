@@ -71,6 +71,7 @@ Rectangle {
             right: parent.right
             /* bottom: parent.bottom */
         }
+        height: (units.iconSizes.medium + units.smallSpacing) * 4
         id: recommended_color
         cw_type: "cw2"
     }
