@@ -177,6 +177,7 @@ void KcmColorfulHelper::changeColorScheme()
 void KcmColorfulHelper::changeColorSchemeB()
 {
     KConfigGroup group(mConfig, "Colors:View");
+    group.writeEntry("ForegroundLink", *c);
     group.writeEntry("DecorationHover", *c);
     KConfigGroup groupWM(mConfig, "WM");
     groupWM.writeEntry("activeBackground", *c);
@@ -314,17 +315,21 @@ void KcmColorfulHelper::save()
 //    delete settings;
 //    runRdb(KRdbExportQtColors | KRdbExportGtkTheme |  KRdbExportColors);
 
-    QDBusMessage messageA = QDBusMessage::createSignal(QStringLiteral("/KGlobalSettings"), QStringLiteral("org.kde.KGlobalSettings"), QStringLiteral("notifyChange") );
-    QList<QVariant> args;
-    args.append(0);//previous KGlobalSettings::PaletteChanged. This is now private API in khintsettings
-    args.append(0);//unused in palette changed but needed for the DBus signature
-    messageA.setArguments(args);
-    QDBusConnection::sessionBus().send(messageA);
-    QDBusMessage message = QDBusMessage::createSignal(QStringLiteral("/KWin"), QStringLiteral("org.kde.KWin"), QStringLiteral("reloadConfig"));
+
+    QDBusMessage message = QDBusMessage::createSignal(QStringLiteral("/KGlobalSettings"),
+                                                      QStringLiteral("org.kde.KGlobalSettings"),
+                                                      QStringLiteral("notifyChange"));
+    message.setArguments({
+                             0, //previous KGlobalSettings::PaletteChanged. This is now private API in khintsettings
+                             0  //unused in palette changed but needed for the DBus signature
+                         });
     QDBusConnection::sessionBus().send(message);
 
+    QDBusMessage message_2 = QDBusMessage::createSignal(QStringLiteral("/KWin"), QStringLiteral("org.kde.KWin"), QStringLiteral("reloadConfig"));
+    QDBusConnection::sessionBus().send(message_2);
+
     QThread::sleep(1);
-    QDBusConnection::sessionBus().send(messageA);
+    QDBusConnection::sessionBus().send(message_2);
 }
 
 void KcmColorfulHelper::genCSName()
