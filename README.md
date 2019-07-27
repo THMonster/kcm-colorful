@@ -49,22 +49,24 @@ Thanks for [@MarvelousBlack](https://github.com/MarvelousBlack)'s maintenance.
 除了KCM，本项目还提供了一个cli的程序，可以供用户配合脚本使用：
 
 ```
-Usage: kcmcolorfulhelper [options]                                            
-Helper for kcm-colorful.                                                
-Project address: https://github.com/IsoaSFlus/kcm-colorful                     
-                                                                              
-Options:                                                  
-  -h, --help               Displays this help.                              
-  -p, --picture <file>     Picture to extract color.     
-  -c, --color <colorcode>  Set color manually, eg: #1234ef.                   
-  -s, --set-as-wallpaper   Set picture specified by "-p" as wallpaper.          
-  -d, --debug              Show debug info.                                     
-  -n, --number <int>       Select the Nth color in candidate list. Default is 1.   
+Usage: kcmcolorfulhelper [options]
+Helper for kcm-colorful.
+Project address: https://github.com/IsoaSFlus/kcm-colorful
+
+Options:
+  -h, --help               Displays this help.
+  -p, --picture <file>     Picture to extract color.
+  -c, --color <colorcode>  Set color manually, eg: #1234ef.
+  -s, --set-as-wallpaper   Set picture specified by "-p" as wallpaper.
+  -d, --debug              Show debug info.
+  -n, --number <int>       Select the Nth color in candidate list. Default is
+                           1.
+  -o, --opacity <float>    Set the opacity of theme, from 0 to 1(1 is opaque).
 ```
 
 **如果你想实现像我截图中一样的效果，那么还需要一些额外的设置。**
 
-首先，打开KDE的系统设置->桌面行为->桌面特效，找到“模糊”项并使能（可根据个人喜好调整该项设置中的模糊程度以及噪点厚度）再找到“背景对比度”项并关闭。
+首先，打开KDE的系统设置->桌面行为->桌面特效，找到“模糊”项并使能（可根据个人喜好调整该项设置中的模糊程度以及噪点厚度），依据个人喜好开启或关闭“背景对比度”项。
 
 之后，打开KDE的系统设置->工作空间主题->桌面主题，设置主题为“Colorful”（当然，前提是你安装了本项目）。
 

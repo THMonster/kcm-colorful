@@ -46,22 +46,24 @@ Thanks for [@MarvelousBlack](https://github.com/MarvelousBlack)'s maintenance.
 ## Postscript
 Besides KCM, this project also provides a CLI program that could be used by your script:
 ```
-Usage: kcmcolorfulhelper [options]                                            
-Helper for kcm-colorful.                                                
-Project address: https://github.com/IsoaSFlus/kcm-colorful                     
-                                                                              
-Options:                                                  
-  -h, --help               Displays this help.                              
-  -p, --picture <file>     Picture to extract color.     
-  -c, --color <colorcode>  Set color manually, eg: #1234ef.                   
-  -s, --set-as-wallpaper   Set picture specified by "-p" as wallpaper.          
-  -d, --debug              Show debug info.                                     
-  -n, --number <int>       Select the Nth color in candidate list. Default is 1.   
+Usage: kcmcolorfulhelper [options]
+Helper for kcm-colorful.
+Project address: https://github.com/IsoaSFlus/kcm-colorful
+
+Options:
+  -h, --help               Displays this help.
+  -p, --picture <file>     Picture to extract color.
+  -c, --color <colorcode>  Set color manually, eg: #1234ef.
+  -s, --set-as-wallpaper   Set picture specified by "-p" as wallpaper.
+  -d, --debug              Show debug info.
+  -n, --number <int>       Select the Nth color in candidate list. Default is
+                           1.
+  -o, --opacity <float>    Set the opacity of theme, from 0 to 1(1 is opaque).   
 ```
 
 **If you want to make your KDE look like the screenshots above, just follow these steps.**
 
-First，open KDE's systemsettings->Desktop Behavior->Desktop Effects. Find "blur" and enable it(You can set the Blur strength and Noise strength to preferable value). And disable the "Background contrast".
+First，open KDE's systemsettings->Desktop Behavior->Desktop Effects. Find "blur" and enable it(You can set the Blur strength and Noise strength to preferable value). 
 
 Then，open KDE's systemsettings->Workspace Theme->Desktop Theme, set your desktop theme to “Colorful”.
 

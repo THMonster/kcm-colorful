@@ -32,6 +32,8 @@ private:
     QString wallpaperFilePath;
     int paletteNum = 8;
     int selectNum = 1;
+    double theme_opacity = 0.6;
+    uint run_type = 0x00; // bit 1 for theme opacity, bit 2 for theme color.
     bool kcm_flag = false;
     bool debug_flag = false;
     void getPrevCSName();
@@ -47,6 +49,7 @@ private:
     void calcColor();
     void setWallpaper(QString pic);
     QColor color_refine(QColor color);
+    void changeThemeOpacity();
 
 signals:
 
