@@ -345,11 +345,11 @@ void KcmColorfulHelper::save()
                          });
     QDBusConnection::sessionBus().send(message);
 
-    QDBusMessage message_2 = QDBusMessage::createSignal(QStringLiteral("/KWin"), QStringLiteral("org.kde.KWin"), QStringLiteral("reloadConfig"));
-    QDBusConnection::sessionBus().send(message_2);
+//    QDBusMessage message_2 = QDBusMessage::createSignal(QStringLiteral("/KWin"), QStringLiteral("org.kde.KWin"), QStringLiteral("reloadConfig"));
+//    QDBusConnection::sessionBus().send(message_2);
 
-    QThread::sleep(1);
-    QDBusConnection::sessionBus().send(message_2);
+//    QThread::sleep(1);
+//    QDBusConnection::sessionBus().send(message_2);
 }
 
 void KcmColorfulHelper::genCSName()
