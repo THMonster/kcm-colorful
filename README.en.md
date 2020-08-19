@@ -8,9 +8,21 @@ Change your KDE Plasma's color based on your wallpaper.
 * extra-cmake-modules
 * GNU gettext utilities
 
+## Dependencies
+> There are some dependencies you'll need to install.  
+
+### Ubuntu
+
+```bash
+sudo apt update && \
+sudo apt install -y cmake make extra-cmake-modules gettext \
+libqt5x11extras5-dev qt5-default qtquickcontrols2-5-dev \
+git g++ libkf5kio-dev libkf5kcmutils-dev libkf5declarative-dev
+```
+
 ## Build
 ```
-git clone --recursive https://github.com/IsoaSFlus/kcm-colorful.git
+git clone --recursive https://github.com/IsoaSFlus/kcm-colorful.git --depth=1
 cd kcm-colorful
 mkdir build
 cd ./build
